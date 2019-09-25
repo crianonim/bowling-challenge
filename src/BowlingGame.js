@@ -1,7 +1,13 @@
 var BowlingGame = function(){
   this.frameRolls = [];
-  this.currentFrame = [];
+  // this.frames=[ [2,3],[10,null],[3,4] ]
+  // this.framesScores=[ 5,17,7]
+  this.rollsToAdd=0;
+  this.extraPoints=0;
 };
+
+// var tempframe=this.frames[this.frames.length-1];
+// this.frame.push([pins])
 
 BowlingGame.prototype.roll = function (pins) {
   this.frameRolls.push(pins);
@@ -10,13 +16,26 @@ BowlingGame.prototype.roll = function (pins) {
   var id="r"+this.frameRolls.length;
   console.log({id})
   document.getElementById(id).textContent=pins
-  var score=this.currentScore();
-  console.log({score})
+  console.log({score},this.rollsToAdd);
+  if (this.rollsToAdd>0){
+    this.extraPoints+=pins;
+    this.rollsToAdd--;
+  }
+  var score=this.currentScore()+this.extraPoints;
   document.getElementById("score").textContent=score;
+  if (pins===10){
+    if (!isEven){
+       this.frameRolls.push(0);
+    }
+    this.rollsToAdd=2;
+  } 
   if (pins===10 && !isEven){
-      this.roll(0);
    }
 };
+
+
+
+
 
 BowlingGame.prototype.currentScore= function () {
   var result=0;
@@ -67,7 +86,7 @@ BowlingGame.prototype.score = function () {
 
 };
 var game=new BowlingGame();
-[5,4,10,4].forEach((el,i)=>setTimeout(()=>{
+[5,5,10,10,10,2,3].forEach((el,i)=>setTimeout(()=>{
   game.roll(el);
 },i*1000))
 // setTimeout(()=>{
